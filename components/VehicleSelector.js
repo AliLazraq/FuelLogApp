@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import ModalSelector from "react-native-modal-selector";
 import axiosInstance from "../services/axiosInstance";
+import axios from "axios";
 
 const VehicleSelector = ({ selectedVehicle, setSelectedVehicle }) => {
   const [vehicles, setVehicles] = useState([]);
@@ -10,7 +11,7 @@ const VehicleSelector = ({ selectedVehicle, setSelectedVehicle }) => {
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
-        const response = await axiosInstance.get("/vehicles");
+        const response = await axiosInstance.get("http://10.126.91.94:8080/api/vehicles");
         const vehicleData = response.data || [];
         setVehicles(vehicleData);
         setFormattedVehicles(
@@ -33,7 +34,10 @@ const VehicleSelector = ({ selectedVehicle, setSelectedVehicle }) => {
       <ModalSelector
         data={formattedVehicles}
         initValue="Select a Vehicle"
-        onChange={(option) => setSelectedVehicle(option.key)}
+        onChange={(option) => {
+          console.log("Vehicle selected from ModalSelector:", option);
+          setSelectedVehicle(option.key);
+        }}
         style={styles.selector}
         initValueTextStyle={styles.initValueText}
         selectTextStyle={styles.selectText}
